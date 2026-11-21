@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+/* Road-trip palette. Light = daytime concrete, dark = night drive. */
+:root {
+  /* One visual world: a night drive. */
+  --bg: #07090e;
+  --surface: #11141b;
+  --ink: #eef0ec;
+  --muted: #9aa1ab;
+  --line: #232833;
+  --lane: #f2c230;
+  --car: #e3343f;
+  --accent: #ff4b55;
+  --accent-soft: #3a1418;
+  --sign: #1d7a52;
+  --ok: #4fd08f;
+  --panel: #050608;
+  --panel-ink: #e9ebe6;
+  --panel-dim: #7d838c;
+  --panel-line: #22262e;
+  --f-display: "Archivo", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  /* Day: bright morning drive */
+  --bg: #edf3f8;
+  --surface: #ffffff;
+  --ink: #12161d;
+  --muted: #4b5562;
+  --line: #d3dbe4;
+  --accent: #d11f2a;
+  --accent-soft: #fde3e4;
+  --sign: #15603f;
+  --ok: #138a52;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-lane: var(--lane);
+  --color-sign: var(--sign);
+  --color-ok: var(--ok);
+  --color-panel: var(--panel);
+  --color-panel-ink: var(--panel-ink);
+  --color-panel-dim: var(--panel-dim);
+  --color-panel-line: var(--panel-line);
+  --font-display: var(--f-display);
+  --font-body: var(--f-body);
+  --font-mono: var(--f-mono);
+}
+@theme {
+  --breakpoint-road: 820px;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  body {
+    background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: clip;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  ::selection { background: var(--lane); color: #111; }
+}
+
+@layer components {
+  .wrap {
+    max-width: 1160px; margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  @media (min-width: 760px) {
+    .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); }
+  }
+  .display { font-family: var(--f-display); font-weight: 900; font-stretch: 125%; text-transform: uppercase; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; text-decoration: none;
+    padding: 11px 18px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink);
+    transition: border-color .15s ease;
+  }
+  .btn:hover { border-color: var(--ink); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-primary:hover { border-color: var(--accent); filter: brightness(1.08); }
+  .sign-date {
+    font-family: var(--f-mono); font-weight: 600; font-size: 12px; letter-spacing: .06em; font-variant-numeric: tabular-nums;
+    background: var(--sign); color: #fff; border-radius: 5px; padding: 3px 9px; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.5);
+  }
+  .checker {
+    height: 18px; border-radius: 3px; border: 1px solid var(--line);
+    background: conic-gradient(var(--ink) 25%, var(--surface) 0 50%, var(--ink) 0 75%, var(--surface) 0) 0 0 / 12px 12px;
+  }
+}
+
+/* Hero veil keeps text readable over the 3D scene, in either sky */
+.hero-veil { background: linear-gradient(90deg, color-mix(in srgb, var(--bg) 90%, transparent) 0%, color-mix(in srgb, var(--bg) 55%, transparent) 45%, transparent 75%); }
+@media (max-width: 1023px) { .hero-veil { background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 88%, transparent) 0%, color-mix(in srgb, var(--bg) 55%, transparent) 55%, transparent 100%); } }
+:root[data-theme="light"] .glass { background: color-mix(in srgb, #ffffff 84%, transparent); border-color: rgba(18,22,29,.08); box-shadow: 0 30px 70px -40px rgba(30,50,80,.45); }
+:root[data-theme="light"] .chapter-head h2 { text-shadow: 0 6px 30px rgba(255,255,255,.7); }
+body { transition: background-color .6s ease, color .6s ease; }
+
+/* Glass panels floating over the 3D scene */
+.glass {
+  background: color-mix(in srgb, #0b0e14 80%, transparent);
+  border: 1px solid rgba(255,255,255,.09);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 30px 80px -40px rgba(0,0,0,.9);
+}
+.stop-card.passed { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+
+/* README rendered inside the details panel */
+.readme { font-size: 14.5px; line-height: 1.65; color: var(--muted); overflow-wrap: anywhere; }
+.readme > :first-child { margin-top: 0; }
+.readme h1, .readme h2, .readme h3, .readme h4 { color: var(--ink); font-family: var(--f-body); font-weight: 700; line-height: 1.25; margin: 1.3em 0 .5em; }
+.readme h1 { font-size: 1.45em; } .readme h2 { font-size: 1.2em; border-bottom: 1px solid var(--line); padding-bottom: .3em; } .readme h3 { font-size: 1.05em; }
+.readme p, .readme ul, .readme ol { margin: .6em 0; }
+.readme ul, .readme ol { padding-left: 1.3em; }
+.readme a { color: var(--accent); }
+.readme code { font-family: var(--f-mono); font-size: .88em; background: color-mix(in srgb, var(--ink) 8%, transparent); padding: .1em .35em; border-radius: 4px; }
+.readme pre { background: var(--panel); color: var(--panel-ink); padding: 12px 14px; border-radius: 8px; overflow-x: auto; }
+.readme pre code { background: none; padding: 0; color: inherit; }
+.readme img { max-width: 100%; height: auto; border-radius: 6px; }
+.readme table { display: block; overflow-x: auto; border-collapse: collapse; font-size: .92em; }
+.readme th, .readme td { border: 1px solid var(--line); padding: 6px 10px; }
+.readme blockquote { margin: .8em 0; padding-left: 1em; border-left: 3px solid var(--line); }
+.readme hr { border: 0; border-top: 1px solid var(--line); margin: 1.2em 0; }
